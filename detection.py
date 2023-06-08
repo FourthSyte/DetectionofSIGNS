@@ -21,9 +21,16 @@ st.set_page_config(
 st.title("Sign Language Detection")
 st.caption("This web demonstrates Sign Language Detection")
 
-# Load the models directly, without caching
-detector = HandDetector(maxHands=2)
-classifier = Classifier('Model/keras_model.h5', 'Model/labels.txt')
+
+# Load the models directly, with caching
+@st.cache(allow_output_mutation=True)
+def load_models():
+    detector = HandDetector(maxHands=2)
+    classifier = Classifier('Model/keras_model.h5', 'Model/labels.txt')
+    return detector, classifier
+
+
+detector, classifier = load_models()
 
 
 offset = 20
@@ -33,7 +40,7 @@ labels = ["A", "B", "C", "D", "E", "F", "G", "H", "I",
           "U", "V", "W", "X", "Y", "Z", "Hello", "ILoveYou", "ThankYou", "Yes",
           "No", "Drink", "Like", "Eat", "More", "Wrong"]
 
-
+@st.caching_data
 def video_frame_callback(frame):
     img = frame.to_ndarray(format="bgr24")
     imgOutput = img.copy()
