@@ -23,7 +23,7 @@ st.caption("This web demonstrates Sign Language Detection")
 
 
 # Load the models directly, with caching
-@st.cache(allow_output_mutation=True)
+@st.cache_resources(allow_output_mutation=True)
 def load_models():
     detector = HandDetector(maxHands=2)
     classifier = Classifier('Model/keras_model.h5', 'Model/labels.txt')
